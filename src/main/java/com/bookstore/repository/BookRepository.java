@@ -88,16 +88,23 @@ public class BookRepository {
     }
 
     // Turns one line of the file back into a Book object
-    // Line format: id|type|title|author|price|quantity|extra
+    // Line format: id|type|title|author|price|quantity|extra|coverImage
     private Book parseLine(String line) {
         try {
             String[] p = line.split("\\|");
             if (p.length < 7) return null;
-            return BookFactory.create(
+
+            Book book = BookFactory.create(
                     p[0], p[1], p[2], p[3],
                     Double.parseDouble(p[4]),
                     Integer.parseInt(p[5]),
                     Double.parseDouble(p[6]));
+
+            // Older lines have no cover field, so it's optional
+            if (p.length >= 8 && !p[7].isBlank()) {
+                book.setCoverImage(p[7]);
+            }
+            return book;
         } catch (NumberFormatException e) {
             System.out.println("Skipping bad line: " + line);
             return null;

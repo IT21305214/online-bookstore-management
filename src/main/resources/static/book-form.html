@@ -4,66 +4,105 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>BookNest | Add Book</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<nav class="navbar">
-    <a href="/" class="logo">📚 BookNest</a>
-    <div>
-        <a href="/">Home</a>
-        <a href="/books.html">Books</a>
-        <a href="/book-form.html">Add Book</a>
-    </div>
-</nav>
+<div class="app">
+    <aside class="sidebar">
+        <a href="/" class="brand">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            <span>BookNest</span>
+        </a>
+        <nav class="side-nav">
+            <a href="/" class="nav-link">
+                <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                Dashboard
+            </a>
+            <a href="/books.html" class="nav-link">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                Books
+            </a>
+            <a href="/book-form.html" class="nav-link active">
+                <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+                Add Book
+            </a>
+        </nav>
+    </aside>
 
-<main class="container">
-    <h1 class="page-title" id="pageTitle">Add New Book</h1>
+    <div class="main">
+        <header class="topbar">
+            <h2>Welcome back, Admin</h2>
+            <div class="user-chip"><span class="avatar">A</span> Admin</div>
+        </header>
 
-    <div id="alert" class="alert alert-error" style="display:none"></div>
-
-    <div class="card">
-        <form id="bookForm">
-            <div class="form-group">
-                <label for="type">Book Type</label>
-                <select id="type">
-                    <option value="PRINTED">Printed Book</option>
-                    <option value="EBOOK">E-Book</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="title">Title</label>
-                <input type="text" id="title" required>
-            </div>
-
-            <div class="form-group">
-                <label for="author">Author</label>
-                <input type="text" id="author" required>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="price">Price (Rs.)</label>
-                    <input type="number" id="price" step="0.01" min="0" required>
-                </div>
-                <div class="form-group">
-                    <label for="quantity">Quantity</label>
-                    <input type="number" id="quantity" min="0" required>
+        <main class="content">
+            <div class="page-head">
+                <div>
+                    <h1 id="pageTitle">Add New Book</h1>
+                    <p>Fill in the book details below</p>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="extra" id="extraLabel">Number of Pages</label>
-                <input type="number" id="extra" step="0.1" min="0.1" required>
-            </div>
+            <div id="alert" class="alert alert-error" style="display:none"></div>
 
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary">Save Book</button>
-                <a href="/books.html" class="btn">Cancel</a>
+            <div class="form-card">
+                <form id="bookForm">
+                    <div class="form-group">
+                        <label for="type">Book Type</label>
+                        <select id="type">
+                            <option value="PRINTED">Printed Book</option>
+                            <option value="EBOOK">E-Book</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" id="title" placeholder="e.g. Madol Doova" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="author">Author</label>
+                        <input type="text" id="author" placeholder="e.g. Martin Wickramasinghe" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cover">Cover Image <span class="optional">(optional)</span></label>
+                        <div class="cover-upload">
+                            <img id="coverPreview" class="cover-preview" alt="Cover preview" style="display:none">
+                            <div id="coverPlaceholder" class="cover-preview placeholder">No image</div>
+                            <div>
+                                <input type="file" id="cover" accept="image/png, image/jpeg, image/webp, image/gif">
+                                <p class="hint">JPG, PNG, WEBP or GIF, up to 5 MB</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="price">Price (Rs.)</label>
+                            <input type="number" id="price" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="quantity">Quantity</label>
+                            <input type="number" id="quantity" min="0" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="extra" id="extraLabel">Number of Pages</label>
+                        <input type="number" id="extra" step="0.1" min="0.1" required>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Save Book</button>
+                        <a href="/books.html" class="btn btn-outline">Cancel</a>
+                    </div>
+                </form>
             </div>
-        </form>
+        </main>
     </div>
-</main>
+</div>
 
 <script src="/js/book-form.js"></script>
 </body>

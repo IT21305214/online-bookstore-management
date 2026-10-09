@@ -4,53 +4,95 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>BookNest | Books</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<nav class="navbar">
-    <a href="/" class="logo">📚 BookNest</a>
-    <div>
-        <a href="/">Home</a>
-        <a href="/books.html">Books</a>
-        <a href="/book-form.html">Add Book</a>
+<div class="app">
+    <aside class="sidebar">
+        <a href="/" class="brand">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            <span>BookNest</span>
+        </a>
+        <nav class="side-nav">
+            <a href="/" class="nav-link">
+                <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                Dashboard
+            </a>
+            <a href="/books.html" class="nav-link active">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                Books
+            </a>
+            <a href="/book-form.html" class="nav-link">
+                <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+                Add Book
+            </a>
+        </nav>
+    </aside>
+
+    <div class="main">
+        <header class="topbar">
+            <h2>Welcome back, Admin</h2>
+            <div class="user-chip"><span class="avatar">A</span> Admin</div>
+        </header>
+
+        <main class="content">
+            <div class="page-head">
+                <h1>Books list</h1>
+                <div class="totals">
+                    <div>Total books <strong id="totalBooks">0</strong></div>
+                    <div>Copies in stock <strong id="totalStock">0</strong></div>
+                </div>
+            </div>
+
+            <div id="alert" class="alert" style="display:none"></div>
+
+            <div class="toolbar">
+                <form id="searchForm" class="search-box">
+                    <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+                    <input type="text" id="keyword" placeholder="Search by title or author">
+                </form>
+                <select id="typeFilter" class="filter-select">
+                    <option value="ALL">All types</option>
+                    <option value="PRINTED">Printed</option>
+                    <option value="EBOOK">E-Book</option>
+                </select>
+                <button type="button" id="clearBtn" class="btn btn-outline">Clear</button>
+                <a href="/book-form.html" class="btn btn-primary">Add new book</a>
+            </div>
+
+            <div class="table-card">
+                <div class="table-wrap" id="tableWrap">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Book ID</th>
+                            <th>Book</th>
+                            <th>Author</th>
+                            <th>Type</th>
+                            <th>Details</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody id="bookTableBody"></tbody>
+                    </table>
+                </div>
+
+                <p id="emptyMessage" class="empty" style="display:none">
+                    No books found. Click "Add new book" to add one.
+                </p>
+
+                <div class="table-footer" id="tableFooter">
+                    <span id="pageInfo"></span>
+                    <div id="pagination" class="pagination"></div>
+                </div>
+            </div>
+        </main>
     </div>
-</nav>
-
-<main class="container">
-    <div class="page-header">
-        <h1>All Books</h1>
-        <a href="/book-form.html" class="btn btn-primary">+ Add Book</a>
-    </div>
-
-    <div id="alert" class="alert" style="display:none"></div>
-
-    <form id="searchForm" class="search-bar">
-        <input type="text" id="keyword" placeholder="Search by title or author...">
-        <button type="submit" class="btn btn-primary">Search</button>
-        <button type="button" id="clearBtn" class="btn">Clear</button>
-    </form>
-
-    <table id="bookTable" style="display:none">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Type</th>
-            <th>Details</th>
-            <th>Price (Rs.)</th>
-            <th>Final Price (Rs.)</th>
-            <th>Stock</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody id="bookTableBody"></tbody>
-    </table>
-
-    <p id="emptyMessage" class="empty" style="display:none">
-        No books found. Click "+ Add Book" to add one.
-    </p>
-</main>
+</div>
 
 <script src="/js/books.js"></script>
 </body>

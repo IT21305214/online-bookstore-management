@@ -2,7 +2,6 @@ package com.bookstore.model;
 
 public class EBook extends Book {
 
-    private static final double DIGITAL_DISCOUNT = 0.10;
     private double fileSizeMb;
 
     public EBook(String id, String title, String author,
@@ -11,12 +10,9 @@ public class EBook extends Book {
         this.fileSizeMb = fileSizeMb;
     }
 
+    // Polymorphism: each book type gives its own answer
     @Override
     public String getType() { return "EBOOK"; }
-
-    // Polymorphism: e-books get a 10% discount
-    @Override
-    public double getFinalPrice() { return getPrice() * (1 - DIGITAL_DISCOUNT); }
 
     @Override
     public double getExtraValue() { return fileSizeMb; }

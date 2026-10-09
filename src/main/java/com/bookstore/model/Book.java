@@ -8,6 +8,7 @@ public abstract class Book {
     private String author;
     private double price;
     private int quantity;
+    private String coverImage;   // file name of the uploaded cover (may be empty)
 
     public Book(String id, String title, String author, double price, int quantity) {
         this.id = id;
@@ -19,16 +20,21 @@ public abstract class Book {
 
     // Abstraction: every child class MUST implement these
     public abstract String getType();
-    public abstract double getFinalPrice();
     public abstract double getExtraValue();
     public abstract String getExtraInfo();
 
-    // Format for saving in the text file: id|type|title|author|price|quantity|extra
+    // File format: id|type|title|author|price|quantity|extra|coverImage
     public String toFileString() {
         return String.join("|",
                 id, getType(), title, author,
                 String.valueOf(price), String.valueOf(quantity),
-                String.valueOf(getExtraValue()));
+                String.valueOf(getExtraValue()),
+                coverImage == null ? "" : coverImage);
+    }
+
+    // URL the browser uses to show the cover (null when there is no cover)
+    public String getCoverUrl() {
+        return (coverImage == null || coverImage.isBlank()) ? null : "/covers/" + coverImage;
     }
 
     public String getId() { return id; }
@@ -45,4 +51,7 @@ public abstract class Book {
 
     public int getQuantity() { return quantity; }
     public void setQuantity(int quantity) { this.quantity = quantity; }
+
+    public String getCoverImage() { return coverImage; }
+    public void setCoverImage(String coverImage) { this.coverImage = coverImage; }
 }

@@ -2,6 +2,10 @@ const params = new URLSearchParams(window.location.search);
 const bookId = params.get('id');          // null when adding a new book
 const form = document.getElementById('bookForm');
 const typeSelect = document.getElementById('type');
+const coverInput = document.getElementById('cover');
+const coverPreview = document.getElementById('coverPreview');
+const coverPlaceholder = document.getElementById('coverPlaceholder');
+const MAX_COVER_SIZE = 5 * 1024 * 1024;   // 5 MB
 
 // Changes the last field's label depending on the book type
 function updateExtraLabel() {
@@ -15,7 +19,32 @@ function showError(message) {
     alertBox.style.display = 'block';
 }
 
+// Shows the cover preview (or the "No image" box)
+function showCover(url) {
+    if (url) {
+        coverPreview.src = url;
+        coverPreview.style.display = 'block';
+        coverPlaceholder.style.display = 'none';
+    } else {
+        coverPreview.style.display = 'none';
+        coverPlaceholder.style.display = 'grid';
+    }
+}
+
 typeSelect.addEventListener('change', updateExtraLabel);
+
+// Preview the chosen image before saving
+coverInput.addEventListener('change', () => {
+    const file = coverInput.files[0];
+    if (!file) return;
+
+    if (file.size > MAX_COVER_SIZE) {
+        showError('Cover image must be 5 MB or smaller.');
+        coverInput.value = '';
+        return;
+    }
+    showCover(URL.createObjectURL(file));
+});
 
 // UPDATE mode - fill the form with the existing book
 async function loadBookForEdit() {
@@ -37,40 +66,40 @@ async function loadBookForEdit() {
         document.getElementById('price').value = data.price;
         document.getElementById('quantity').value = data.quantity;
         document.getElementById('extra').value = data.extraValue;
+        showCover(data.coverUrl);
         updateExtraLabel();
     } catch (error) {
         showError('Could not load book details.');
     }
 }
 
-// CREATE or UPDATE - send the form data to the backend
+// CREATE or UPDATE - send the form data (and image) to the backend
 form.addEventListener('submit', async event => {
     event.preventDefault();
 
-    const book = {
-        type: typeSelect.value,
-        title: document.getElementById('title').value.trim(),
-        author: document.getElementById('author').value.trim(),
-        price: parseFloat(document.getElementById('price').value),
-        quantity: parseInt(document.getElementById('quantity').value),
-        extra: parseFloat(document.getElementById('extra').value)
-    };
+    const formData = new FormData();
+    formData.append('type', typeSelect.value);
+    formData.append('title', document.getElementById('title').value.trim());
+    formData.append('author', document.getElementById('author').value.trim());
+    formData.append('price', document.getElementById('price').value);
+    formData.append('quantity', document.getElementById('quantity').value);
+    formData.append('extra', document.getElementById('extra').value);
+
+    if (coverInput.files[0]) {
+        formData.append('cover', coverInput.files[0]);
+    }
 
     const url = bookId ? '/api/books/' + encodeURIComponent(bookId) : '/api/books';
-    const method = bookId ? 'PUT' : 'POST';
 
     try {
-        const response = await fetch(url, {
-            method: method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(book)
-        });
+        // No Content-Type header: the browser sets it for file uploads
+        const response = await fetch(url, { method: 'POST', body: formData });
         const data = await response.json();
 
         if (response.ok) {
             window.location.href = '/books.html?msg=' + encodeURIComponent(data.message);
         } else {
-            showError(data.error);
+            showError(data.error || 'Please check the form and try again.');
         }
     } catch (error) {
         showError('Could not save book. Is the server running?');

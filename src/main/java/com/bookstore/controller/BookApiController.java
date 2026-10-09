@@ -5,8 +5,10 @@ import com.bookstore.model.Book;
 import com.bookstore.model.EBook;
 import com.bookstore.service.BookService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -45,22 +47,27 @@ public class BookApiController {
         return bookService.getBookById(id);
     }
 
-    // CREATE:  POST /api/books
-    @PostMapping
-    public ResponseEntity<Map<String, String>> createBook(@RequestBody BookRequest request) {
+    // CREATE (with optional cover image):  POST /api/books
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Map<String, String>> createBook(
+            @ModelAttribute BookRequest request,
+            @RequestParam(value = "cover", required = false) MultipartFile cover) {
+
         bookService.saveBook(null, request.getType(), request.getTitle(), request.getAuthor(),
-                request.getPrice(), request.getQuantity(), request.getExtra());
+                request.getPrice(), request.getQuantity(), request.getExtra(), cover);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Map.of("message", "Book added successfully!"));
     }
 
-    // UPDATE:  PUT /api/books/B1234
-    @PutMapping("/{id}")
-    public Map<String, String> updateBook(@PathVariable("id") String id,
-                                          @RequestBody BookRequest request) {
-        bookService.getBookById(id); // throws an error if the book doesn't exist
+    // UPDATE (with optional new cover image):  POST /api/books/B1234
+    @PostMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Map<String, String> updateBook(
+            @PathVariable("id") String id,
+            @ModelAttribute BookRequest request,
+            @RequestParam(value = "cover", required = false) MultipartFile cover) {
+
         bookService.saveBook(id, request.getType(), request.getTitle(), request.getAuthor(),
-                request.getPrice(), request.getQuantity(), request.getExtra());
+                request.getPrice(), request.getQuantity(), request.getExtra(), cover);
         return Map.of("message", "Book updated successfully!");
     }
 
