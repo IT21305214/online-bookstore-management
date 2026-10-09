@@ -32,10 +32,11 @@ function formatPrice(value) {
     });
 }
 
+// In stock when there is at least one copy, otherwise out of stock
 function stockStatus(quantity) {
-    if (quantity === 0) return { label: 'Out of stock', cls: 'status-out' };
-    if (quantity < 5) return { label: 'Low stock', cls: 'status-low' };
-    return { label: 'In stock', cls: 'status-in' };
+    return quantity > 0
+        ? { label: 'In stock', cls: 'status-in' }
+        : { label: 'Out of stock', cls: 'status-out' };
 }
 
 function showAlert(message, type) {

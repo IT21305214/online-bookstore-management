@@ -37,6 +37,11 @@ public abstract class Book {
         return (coverImage == null || coverImage.isBlank()) ? null : "/covers/" + coverImage;
     }
 
+    // A book is in stock when it has at least one copy
+    public boolean isInStock() {
+        return quantity > 0;
+    }
+
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 

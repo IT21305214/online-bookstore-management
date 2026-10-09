@@ -2,6 +2,9 @@ const params = new URLSearchParams(window.location.search);
 const bookId = params.get('id');          // null when adding a new book
 const form = document.getElementById('bookForm');
 const typeSelect = document.getElementById('type');
+const quantityInput = document.getElementById('quantity');
+const inStockInput = document.getElementById('inStock');
+const stockLabel = document.getElementById('stockLabel');
 const coverInput = document.getElementById('cover');
 const coverPreview = document.getElementById('coverPreview');
 const coverPlaceholder = document.getElementById('coverPlaceholder');
@@ -11,6 +14,20 @@ const MAX_COVER_SIZE = 5 * 1024 * 1024;   // 5 MB
 function updateExtraLabel() {
     document.getElementById('extraLabel').textContent =
         typeSelect.value === 'EBOOK' ? 'File Size (MB)' : 'Number of Pages';
+}
+
+// In stock = quantity can be entered (min 1); out of stock = quantity locked at 0
+function updateStockState() {
+    if (inStockInput.checked) {
+        quantityInput.disabled = false;
+        quantityInput.min = 1;
+        if (quantityInput.value === '0') quantityInput.value = '';
+        stockLabel.textContent = 'In stock';
+    } else {
+        quantityInput.disabled = true;
+        quantityInput.value = 0;
+        stockLabel.textContent = 'Out of stock';
+    }
 }
 
 function showError(message) {
@@ -32,6 +49,10 @@ function showCover(url) {
 }
 
 typeSelect.addEventListener('change', updateExtraLabel);
+inStockInput.addEventListener('change', () => {
+    updateStockState();
+    if (inStockInput.checked) quantityInput.focus();
+});
 
 // Preview the chosen image before saving
 coverInput.addEventListener('change', () => {
@@ -64,10 +85,12 @@ async function loadBookForEdit() {
         document.getElementById('title').value = data.title;
         document.getElementById('author').value = data.author;
         document.getElementById('price').value = data.price;
-        document.getElementById('quantity').value = data.quantity;
+        quantityInput.value = data.quantity;
+        inStockInput.checked = data.inStock;
         document.getElementById('extra').value = data.extraValue;
         showCover(data.coverUrl);
         updateExtraLabel();
+        updateStockState();
     } catch (error) {
         showError('Could not load book details.');
     }
@@ -82,7 +105,8 @@ form.addEventListener('submit', async event => {
     formData.append('title', document.getElementById('title').value.trim());
     formData.append('author', document.getElementById('author').value.trim());
     formData.append('price', document.getElementById('price').value);
-    formData.append('quantity', document.getElementById('quantity').value);
+    formData.append('quantity', quantityInput.value || '0');
+    formData.append('inStock', inStockInput.checked);
     formData.append('extra', document.getElementById('extra').value);
 
     if (coverInput.files[0]) {
@@ -110,4 +134,5 @@ if (bookId) {
     loadBookForEdit();
 } else {
     updateExtraLabel();
+    updateStockState();
 }

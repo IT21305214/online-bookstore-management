@@ -45,12 +45,19 @@ public class BookService {
 
     // CREATE + UPDATE - validate, save the cover image, then save the book
     public void saveBook(String id, String type, String title, String author,
-                         double price, int quantity, double extra, MultipartFile cover) {
+                         double price, int quantity, double extra,
+                         boolean inStock, MultipartFile cover) {
         if (title == null || title.isBlank()) throw new IllegalArgumentException("Title is required");
         if (author == null || author.isBlank()) throw new IllegalArgumentException("Author is required");
         if (price < 0) throw new IllegalArgumentException("Price cannot be negative");
-        if (quantity < 0) throw new IllegalArgumentException("Quantity cannot be negative");
         if (extra <= 0) throw new IllegalArgumentException("Pages / file size must be greater than 0");
+
+        // Stock rule: switched off = out of stock (0 copies), switched on = at least 1 copy
+        if (!inStock) {
+            quantity = 0;
+        } else if (quantity < 1) {
+            throw new IllegalArgumentException("Quantity must be at least 1 when the book is in stock");
+        }
 
         boolean isNew = (id == null || id.isBlank());
         String coverImage = null;

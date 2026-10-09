@@ -54,7 +54,8 @@ public class BookApiController {
             @RequestParam(value = "cover", required = false) MultipartFile cover) {
 
         bookService.saveBook(null, request.getType(), request.getTitle(), request.getAuthor(),
-                request.getPrice(), request.getQuantity(), request.getExtra(), cover);
+                request.getPrice(), request.getQuantity(), request.getExtra(),
+                request.isInStock(), cover);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Map.of("message", "Book added successfully!"));
     }
@@ -67,7 +68,8 @@ public class BookApiController {
             @RequestParam(value = "cover", required = false) MultipartFile cover) {
 
         bookService.saveBook(id, request.getType(), request.getTitle(), request.getAuthor(),
-                request.getPrice(), request.getQuantity(), request.getExtra(), cover);
+                request.getPrice(), request.getQuantity(), request.getExtra(),
+                request.isInStock(), cover);
         return Map.of("message", "Book updated successfully!");
     }
 

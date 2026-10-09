@@ -1,6 +1,6 @@
 package com.bookstore.dto;
 
-// Holds the data sent from the HTML form (as JSON) to the backend
+// Holds the data sent from the HTML form to the backend
 public class BookRequest {
 
     private String type;
@@ -9,6 +9,7 @@ public class BookRequest {
     private double price;
     private int quantity;
     private double extra;
+    private boolean inStock = true;
 
     public BookRequest() {
     }
@@ -30,4 +31,7 @@ public class BookRequest {
 
     public double getExtra() { return extra; }
     public void setExtra(double extra) { this.extra = extra; }
+
+    public boolean isInStock() { return inStock; }
+    public void setInStock(boolean inStock) { this.inStock = inStock; }
 }

@@ -85,8 +85,17 @@
                         </div>
                         <div class="form-group">
                             <label for="quantity">Quantity</label>
-                            <input type="number" id="quantity" min="0" required>
+                            <input type="number" id="quantity" min="1" required>
                         </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Availability</label>
+                        <label class="switch-row" for="inStock">
+                            <input type="checkbox" id="inStock" class="switch-input" checked>
+                            <span class="switch"></span>
+                            <span id="stockLabel">In stock</span>
+                        </label>
                     </div>
 
                     <div class="form-group">
