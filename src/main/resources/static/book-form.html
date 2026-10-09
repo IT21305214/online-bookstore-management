@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BookNest | Add Book</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<nav class="navbar">
+    <a href="/" class="logo">📚 BookNest</a>
+    <div>
+        <a href="/">Home</a>
+        <a href="/books.html">Books</a>
+        <a href="/book-form.html">Add Book</a>
+    </div>
+</nav>
+
+<main class="container">
+    <h1 class="page-title" id="pageTitle">Add New Book</h1>
+
+    <div id="alert" class="alert alert-error" style="display:none"></div>
+
+    <div class="card">
+        <form id="bookForm">
+            <div class="form-group">
+                <label for="type">Book Type</label>
+                <select id="type">
+                    <option value="PRINTED">Printed Book</option>
+                    <option value="EBOOK">E-Book</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" id="title" required>
+            </div>
+
+            <div class="form-group">
+                <label for="author">Author</label>
+                <input type="text" id="author" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="price">Price (Rs.)</label>
+                    <input type="number" id="price" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="quantity">Quantity</label>
+                    <input type="number" id="quantity" min="0" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="extra" id="extraLabel">Number of Pages</label>
+                <input type="number" id="extra" step="0.1" min="0.1" required>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save Book</button>
+                <a href="/books.html" class="btn">Cancel</a>
+            </div>
+        </form>
+    </div>
+</main>
+
+<script src="/js/book-form.js"></script>
+</body>
+</html>
